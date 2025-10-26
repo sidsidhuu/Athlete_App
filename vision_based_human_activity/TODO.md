@@ -1,0 +1,5 @@
+- [x] Update README.md with complete folder structure and activity parameters/details
+- [ ] Initialize Git repository in vision_based_human_activity directory
+- [ ] Add all project files to Git
+- [ ] Commit the changes with updated README
+- [ ] Prepare for pushing to new GitHub repository (install gh CLI if needed)
