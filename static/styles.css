@@ -7,6 +7,8 @@ body {
     background-size: cover;
     min-height: 100vh;
     color: #333;
+    font-size: 16px;
+    line-height: 1.6;
 }
 
 /* Page-specific backgrounds */
@@ -52,6 +54,8 @@ nav h2 {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    font-size: 1.5rem;
+    font-weight: 700;
 }
 
 nav ul {
@@ -101,12 +105,17 @@ nav a:hover {
 .welcome-text h1 {
     color: #667eea;
     margin-bottom: 1rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
 }
 
 .welcome-text p {
     color: #555;
     margin-bottom: 2rem;
     line-height: 1.6;
+    font-size: 1.1rem;
+    text-align: center;
 }
 
 .features {
@@ -381,19 +390,13 @@ nav a:hover {
     margin: 0.5rem 0 1rem 0;
     color: #667eea;
     font-size: 1.2rem;
+    text-align: center;
 }
 
 .activity-logo {
     font-size: 3rem;
     text-align: center;
     margin-bottom: 0.5rem;
-}
-
-.activity-item h4 {
-    text-align: center;
-    margin: 0.5rem 0 1rem 0;
-    color: #667eea;
-    font-size: 1.2rem;
 }
 
 .select-btn {
