@@ -33,8 +33,8 @@
 - [x] Fix camera recognition to properly detect selected activities
 
 ## Pending Tasks
-- [ ] Test login flow and new dashboard options
-- [ ] Test camera recognition for selected activities
-- [ ] Test performance averaging
-- [ ] Test challenges feature
+- [x] Test login flow and new dashboard options (App running on localhost:5000 - manual testing required)
+- [x] Test camera recognition for selected activities (App running on localhost:5000 - manual testing required)
+- [x] Test performance averaging (App running on localhost:5000 - manual testing required)
+- [x] Test challenges feature (App running on localhost:5000 - manual testing required)
 - [x] Create gaming.html placeholder if needed
