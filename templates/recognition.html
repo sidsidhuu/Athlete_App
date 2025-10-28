@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Recognition - Athlete Activity Recognition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="recognition-page">
+    <nav>
+        <div class="nav-container">
+            <h2>Athlete Activity Recognition</h2>
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('recognition') }}">Recognition</a></li>
+                <li><a href="{{ url_for('settings') }}">Settings</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Real-time Activity Recognition</h1>
+        <div class="recognition-container">
+            <video id="video" autoplay></video>
+            <div class="results">
+                <h2>Activity: <span id="activity">Waiting...</span></h2>
+                <h2>Performance Score: <span id="score">0.00</span></h2>
+            </div>
+        </div>
+        <button id="startBtn" class="btn">Start Recognition</button>
+        <button id="stopBtn" class="btn" style="display:none;">Stop Recognition</button>
+        <button id="offBtn" class="btn" style="display:none;">Off Camera</button>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

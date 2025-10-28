@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athlete Activity Recognition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Athlete Activity Recognition</h1>
+        <div class="video-container">
+            <video id="video" autoplay playsinline></video>
+            <canvas id="canvas" style="display:none;"></canvas>
+        </div>
+        <div class="results">
+            <div class="result-item">
+                <label>Activity:</label>
+                <span id="activity">Waiting...</span>
+            </div>
+            <div class="result-item">
+                <label>Performance Score:</label>
+                <span id="score">0</span>
+            </div>
+        </div>
+        <button id="startBtn">Start Recognition</button>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

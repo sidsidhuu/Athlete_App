@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Athlete Activity Recognition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="dashboard-page">
+    <nav>
+        <div class="nav-container">
+            <h2>Athlete Activity Recognition</h2>
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('recognition') }}">Recognition</a></li>
+                <li><a href="{{ url_for('settings') }}">Settings</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Welcome to Your Dashboard</h1>
+        <p>Hello, {{ session['user'] }}! Ready to track your activities?</p>
+        <div class="dashboard-options">
+            <div class="option">
+                <h3>Athlete Fitness</h3>
+                <p>Track your fitness activities and performance scores.</p>
+                <a href="{{ url_for('athlete_fitness') }}" class="btn">Go to Fitness</a>
+            </div>
+            <div class="option">
+                <h3>Gaming</h3>
+                <p>Engage in fitness-related gaming challenges.</p>
+                <a href="{{ url_for('gaming') }}" class="btn">Start Gaming</a>
+            </div>
+        </div>
+        <div class="back-to-home">
+            <a href="{{ url_for('welcome') }}" class="btn">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaming - Athlete Activity Recognition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <h2>Athlete Activity Recognition</h2>
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('gaming') }}">Gaming</a></li>
+                <li><a href="{{ url_for('settings') }}">Settings</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Gaming Challenges</h1>
+        <div class="gaming-container">
+            <div class="activities-section">
+                <h2>Select Activities for Gaming</h2>
+                <form id="gamingActivityForm">
+                    <div class="activity-checkboxes">
+                        <div class="activity-item">
+                            <div class="activity-logo">🤼‍♂️</div>
+                            <h4>Kabbadi</h4>
+                            <button type="button" class="select-btn btn" data-activity="kabbadi">Select</button>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-logo">🏐</div>
+                            <h4>Volleyball</h4>
+                            <button type="button" class="select-btn btn" data-activity="volleyball">Select</button>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-logo">🏏</div>
+                            <h4>Cricket</h4>
+                            <button type="button" class="select-btn btn" data-activity="cricket">Select</button>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-logo">🏸</div>
+                            <h4>Badminton</h4>
+                            <button type="button" class="select-btn btn" data-activity="badminton">Select</button>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-logo">🏀</div>
+                            <h4>Basketball</h4>
+                            <button type="button" class="select-btn btn" data-activity="basketball">Select</button>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-logo">⚽</div>
+                            <h4>Football</h4>
+                            <button type="button" class="select-btn btn" data-activity="football">Select</button>
+                        </div>
+                    </div>
+                    <div class="camera-controls-section">
+                        <button type="button" id="gamingOnCameraBtn" class="btn camera-btn on-camera-btn">On Camera</button>
+                        <button type="button" id="gamingOffCameraBtn" class="btn camera-btn off-camera-btn">Off Camera</button>
+                    </div>
+                    <button type="button" id="selectGamingActivities" class="btn">Select for Gaming</button>
+                </form>
+            </div>
+
+            <div class="selected-gaming-activities" id="selectedGamingActivities" style="display:none;">
+                <h2>Gaming Session</h2>
+                <div id="gamingActivityList"></div>
+                <div class="gaming-score-section">
+                    <h3>Gaming Score: <span id="gamingScore">0.00</span></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
