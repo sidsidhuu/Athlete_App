@@ -1,7 +1,11 @@
+Flask
+Flask-SQLAlchemy
+Werkzeug
 tensorflow
 keras
-opencv-python
+opencv-python-headless
 numpy
 matplotlib
 scikit-learn
-flask
+gunicorn
+
