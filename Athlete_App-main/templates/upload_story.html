@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Story - Athlete Activity Recognition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="upload-story-page">
+    <nav>
+        <div class="nav-container">
+            <h2>Athlete Activity Recognition</h2>
+            <div class="nav-right">
+                <a href="{{ url_for('profile') }}" class="profile-icon-link">
+                    <div class="profile-icon" id="profileIcon" style="position: relative;">
+                        {% if session.get('profile_photo') %}
+                            <img src="{{ url_for('static', filename='uploads/profiles/' + session['profile_photo']) }}" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                        {% else %}
+                            {{ session['user'][0].upper() }}
+                        {% endif %}
+                        {% if session.get('nickname') %}
+                            <div class="nickname-overlay">@{{ session['nickname'] }}</div>
+                        {% endif %}
+                    </div>
+                </a>
+                <div class="profile-menu" id="profileMenu">
+                    <div class="profile-details">
+                        <p><strong>{{ session['user'] }}</strong></p>
+                        {% if session.get('nickname') %}
+                            <p>@{{ session['nickname'] }}</p>
+                        {% endif %}
+                        <p>{{ session.get('email', 'N/A') }}</p>
+                    </div>
+                    <a href="{{ url_for('profile') }}" class="btn">View Profile</a>
+                    <a href="{{ url_for('settings') }}" class="btn">Settings</a>
+                    <button class="logout-btn" onclick="window.location.href='{{ url_for('logout') }}'">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Upload Story</h1>
+        <form id="storyForm" enctype="multipart/form-data" method="POST">
+            <div class="form-group">
+                <label for="content">Caption (optional):</label>
+                <textarea id="content" name="content" rows="3" placeholder="Write a caption for your story..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="media">Choose Photo or Video:</label>
+                <input type="file" id="media" name="media" accept="image/*,video/*" required>
+                <div id="filePreview" style="margin-top: 10px;"></div>
+            </div>
+            <button type="submit" class="btn">Upload Story</button>
+        </form>
+        <div id="message" style="margin-top: 1rem; display: none;"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        document.getElementById('media').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('filePreview');
+            preview.innerHTML = '';
+
+            if (file) {
+                const fileType = file.type.split('/')[0];
+                if (fileType === 'image') {
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    img.style.maxWidth = '200px';
+                    img.style.maxHeight = '200px';
+                    img.style.border = '1px solid #ccc';
+                    img.style.borderRadius = '5px';
+                    preview.appendChild(img);
+                } else if (fileType === 'video') {
+                    const video = document.createElement('video');
+                    video.src = URL.createObjectURL(file);
+                    video.style.maxWidth = '200px';
+                    video.style.maxHeight = '200px';
+                    video.style.border = '1px solid #ccc';
+                    video.style.borderRadius = '5px';
+                    video.controls = true;
+                    preview.appendChild(video);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

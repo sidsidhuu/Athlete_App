@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Athlete Activity Recognition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="profile-page">
+    <nav>
+        <div class="nav-container">
+            <h2>Athlete Activity Recognition</h2>
+            <div class="nav-right">
+                <div class="profile-icon" id="profileIcon">
+                    {% if session.get('profile_photo') %}
+                        <img src="{{ url_for('static', filename='uploads/profiles/' + session['profile_photo']) }}" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                    {% else %}
+                        {{ session['user'][0].upper() }}
+                    {% endif %}
+                </div>
+                <div class="profile-menu" id="profileMenu">
+                    <div class="profile-details">
+                        <p><strong>{{ session['user'] }}</strong></p>
+                        <p>{{ session.get('email', 'N/A') }}</p>
+                    </div>
+                    <a href="{{ url_for('profile') }}" class="btn">View Profile</a>
+                    <a href="{{ url_for('settings') }}" class="btn">Settings</a>
+                    <button class="logout-btn" onclick="window.location.href='{{ url_for('logout') }}'">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="profile-header">
+            <div class="profile-avatar">
+                {% if session.get('profile_photo') %}
+                    <img src="{{ url_for('static', filename='uploads/profiles/' + session['profile_photo']) }}" alt="Profile Photo">
+                {% else %}
+                    <div class="default-avatar">{{ session['user'][0].upper() }}</div>
+                {% endif %}
+            </div>
+            <div class="profile-info">
+                <h1>{{ session['user'] }}</h1>
+                <div class="profile-stats">
+                    <span><strong>0</strong> posts</span>
+                    <span><strong>0</strong> followers</span>
+                    <span><strong>0</strong> following</span>
+                </div>
+                <p class="bio">{{ session.get('bio', 'Fitness enthusiast | Activity tracker') }}</p>
+                <div class="profile-actions">
+                    <a href="{{ url_for('edit_profile') }}" class="btn">Edit Profile</a>
+                    <a href="{{ url_for('upload_story') }}" class="btn">Upload Story</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-content">
+            <div class="content-tabs">
+                <button class="tab-btn active" data-tab="posts">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="9.5" cy="9.5" r="1.5" fill="currentColor"/>
+                        <path d="M21 15l-3.086-3.086a2 2 0 00-2.828 0L6 21" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    POSTS
+                </button>
+                <button class="tab-btn" data-tab="reels">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="2"/>
+                        <polygon points="9,6 9,18 17,12" fill="currentColor"/>
+                    </svg>
+                    REELS
+                </button>
+                <button class="tab-btn" data-tab="tagged">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    TAGGED
+                </button>
+            </div>
+
+            <div class="tab-content">
+                <div id="posts" class="content-section active">
+                    <div class="empty-state">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+                            <circle cx="9.5" cy="9.5" r="1.5" fill="currentColor" opacity="0.3"/>
+                            <path d="M21 15l-3.086-3.086a2 2 0 00-2.828 0L6 21" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+                        </svg>
+                        <h3>No Posts Yet</h3>
+                        <p>Share your fitness activities and achievements!</p>
+                        <button class="btn primary">Create Your First Post</button>
+                    </div>
+                </div>
+
+                <div id="reels" class="content-section">
+                    <div class="stories-grid">
+                        {% for story in user.stories %}
+                            <div class="story-item">
+                                {% if story.media_type == 'photo' %}
+                                    <img src="{{ url_for('static', filename='uploads/stories/' + story.media_path) }}" alt="Story">
+                                {% elif story.media_type == 'video' %}
+                                    <video controls>
+                                        <source src="{{ url_for('static', filename='uploads/stories/' + story.media_path) }}" type="video/mp4">
+                                    </video>
+                                {% endif %}
+                                {% if story.content %}
+                                    <p>{{ story.content }}</p>
+                                {% endif %}
+                                <small>{{ story.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                            </div>
+                        {% else %}
+                            <div class="empty-state">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+                                    <polygon points="9,6 9,18 17,12" fill="currentColor" opacity="0.3"/>
+                                </svg>
+                                <h3>No Stories Yet</h3>
+                                <p>Share your fitness journey with stories!</p>
+                                <a href="{{ url_for('upload_story') }}" class="btn primary">Upload Your First Story</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div id="tagged" class="content-section">
+                    <div class="empty-state">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+                            <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+                        </svg>
+                        <h3>No Tagged Posts</h3>
+                        <p>When people tag you in posts, they'll appear here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

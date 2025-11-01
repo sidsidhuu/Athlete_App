@@ -1,0 +1,4 @@
+- [ ] Add /upload_story route in app.py (GET and POST)
+- [ ] Create upload_story.html template
+- [ ] Update profile.html to display stories/reels
+- [ ] Add upload link in profile or dashboard
