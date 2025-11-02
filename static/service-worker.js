@@ -152,7 +152,7 @@ async function flushOutbox() {
 
 // --- Periodic Sync ---
 self.addEventListener('periodicsync', event => {
-  if (event.tag === 'refresh-data' || event.tag === 'periodic-sync') {
+  if (event.tag === 'refresh-data' || event.tag === 'periodic-sync' || event.tag === 'update-athlete-data') {
     event.waitUntil(periodicRefresh());
   }
 });
@@ -169,6 +169,19 @@ async function periodicRefresh() {
     }
   } catch (err) {
     console.warn('Periodic refresh failed', err);
+  }
+}
+
+async function updateAthleteData() {
+  try {
+    const res = await fetch('/api/athlete/latest');
+    if (res && res.ok) {
+      const data = await res.json();
+      console.log('Background data updated:', data);
+      // Optionally cache or notify the app
+    }
+  } catch (err) {
+    console.warn('Background update failed', err);
   }
 }
 

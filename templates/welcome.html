@@ -51,7 +51,16 @@
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
           navigator.serviceWorker.register('/static/service-worker.js')
-            .then(reg => console.log('Service Worker registered!', reg))
+            .then(reg => {
+              console.log('Service Worker registered!', reg);
+              // Request periodic sync permission
+              if ('periodicSync' in reg) {
+                reg.periodicSync.register('update-athlete-data', {
+                  minInterval: 24 * 60 * 60 * 1000 // once a day
+                }).then(() => console.log('Periodic sync registered'))
+                  .catch(err => console.log('Periodic sync failed:', err));
+              }
+            })
             .catch(err => console.log('Service Worker failed: ', err));
         });
       }
