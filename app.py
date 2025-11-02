@@ -531,6 +531,31 @@ def logout():
     logger.info(f"User {username} logged out successfully")
     return redirect(url_for('welcome'))
 
+@app.route('/delete_post/<int:post_id>', methods=['DELETE'])
+def delete_post(post_id):
+    if 'user' not in session:
+        return jsonify({'success': False, 'message': 'Not logged in'}), 401
+
+    user = User.query.filter_by(username=session['user']).first()
+    if not user:
+        return jsonify({'success': False, 'message': 'User not found'}), 404
+
+    post = Post.query.filter_by(id=post_id, user_id=user.id).first()
+    if not post:
+        return jsonify({'success': False, 'message': 'Post not found or not owned by user'}), 404
+
+    # Delete the file if it exists
+    if post.video_path:
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], 'posts', post.video_path)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+    # Delete the post from database
+    db.session.delete(post)
+    db.session.commit()
+
+    return jsonify({'success': True, 'message': 'Post deleted successfully'})
+
 @app.route('/predict', methods=['POST'])
 def predict():
     global activity_duration
