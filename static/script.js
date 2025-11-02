@@ -14,12 +14,3 @@ if ('serviceWorker' in navigator && 'PeriodicSyncManager' in window) {
     }
   });
 }
-
-// Register athlete data periodic sync
-navigator.serviceWorker.ready.then(sw => {
-  if ('periodicSync' in sw.registration) {
-    sw.registration.periodicSync.register('update-athlete-data', {
-      minInterval: 24 * 60 * 60 * 1000 // once a day
-    });
-  }
-});

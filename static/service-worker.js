@@ -74,13 +74,6 @@ self.addEventListener('push', event => {
   );
 });
 
-// Periodic sync for updating athlete data
-self.addEventListener("periodicsync", event => {
-  if (event.tag === "update-athlete-data") {
-    event.waitUntil(updateAthleteData());
-  }
-});
-
 // Handle messages from main thread
 self.addEventListener('message', event => {
   if (event.data && event.data.type === 'QUEUE_REQUEST') {
@@ -98,14 +91,4 @@ function queueRequest(request) {
 function syncOfflineRequests() {
   // Process queued requests
   console.log('Syncing offline requests...');
-}
-
-// Periodic sync function to update athlete data
-async function updateAthleteData() {
-  console.log("Periodic Sync: updating athlete data...");
-  // Example fetch: update cached performance data
-  const response = await fetch("/api/performance/latest");
-  const data = await response.json();
-  const cache = await caches.open(CACHE_NAME);
-  await cache.put("/api/performance/latest", new Response(JSON.stringify(data)));
 }
