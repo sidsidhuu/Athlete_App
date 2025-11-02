@@ -1,14 +1,14 @@
 {
   "name": "SSA",
   "short_name": "SSA",
-  "description": "Smart Sports Analytics — performance tracking and athlete insights platform.",
+  "description": "Smart Sports Analytics — AI-powered performance tracking and athlete insights.",
   "start_url": "/",
   "scope": "/",
+  "id": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#000000",
-  "id": "/",
   "lang": "en",
   "dir": "auto",
   "icons": [
@@ -23,6 +23,20 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/static/screenshot1.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "label": "SSA dashboard screen"
+    },
+    {
+      "src": "/static/screenshot2.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "label": "Athlete performance report"
     }
   ]
 }
