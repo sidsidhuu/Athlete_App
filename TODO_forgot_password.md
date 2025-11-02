@@ -1,0 +1,8 @@
+- [x] Install Flask-Mail
+- [x] Add email config to app.py
+- [x] Add OTP model or use session for temporary storage
+- [x] Add /forgot_password route (GET: form, POST: send OTP)
+- [x] Add /reset_password route (GET: enter OTP, POST: verify and update password)
+- [x] Create forgot_password.html template
+- [x] Create reset_password.html template
+- [x] Update login.html to add "Forgot Password?" link

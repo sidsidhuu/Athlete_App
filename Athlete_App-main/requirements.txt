@@ -1,0 +1,13 @@
+Flask
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-Session
+Werkzeug
+tensorflow
+keras
+opencv-python-headless
+numpy
+matplotlib
+scikit-learn
+gunicorn
+

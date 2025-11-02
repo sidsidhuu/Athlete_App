@@ -1,0 +1,10 @@
+- [x] Add nickname field to User model in models.py
+- [x] Create migration for nickname field
+- [x] Add /edit_profile route in app.py (GET and POST)
+- [x] Create edit_profile.html template
+- [x] Update profile.html to link Edit Profile button to /edit_profile
+- [x] Remove inline edit form from profile.html
+- [ ] Add /upload_story route in app.py (GET and POST)
+- [ ] Create upload_story.html template
+- [ ] Update profile.html to display stories/reels
+- [ ] Add upload link in profile or dashboard

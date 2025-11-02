@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - Athlete Activity Recognition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <h2>Athlete Activity Recognition</h2>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="welcome-content">
+            <div class="welcome-text">
+                <h1>Welcome to Athlete Activity Recognition</h1>
+                <p>Experience cutting-edge AI-powered activity recognition using your webcam. Track your fitness activities in real-time!</p>
+
+                <div class="features">
+                    <div class="feature">
+                        <h3>Real-time Detection</h3>
+                        <p>Instantly recognize activities like running, walking, squats, pushups, jumping jacks, and stretching.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Performance Scoring</h3>
+                        <p>Get detailed performance scores to track your progress and improve your form.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Easy to Use</h3>
+                        <p>Simply allow camera access and start your workout. No complex setup required.</p>
+                    </div>
+                </div>
+                <a href="{{ url_for('auth') }}" class="btn">Get Started</a>
+            </div>
+
+            <!-- Gaming Photo Section -->
+            <div class="gaming-hero">
+                <img src="{{ url_for('static', filename='gaming-hero.jpg') }}" alt="Gaming and Fitness Activities" class="gaming-image">
+                <div class="gaming-overlay">
+                    <h2>Level Up Your Fitness Game!</h2>
+                    <p>Combine gaming excitement with real fitness tracking. Choose from sports like Kabbadi, Basketball, Football, and more!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
