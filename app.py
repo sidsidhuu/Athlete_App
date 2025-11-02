@@ -531,6 +531,22 @@ def logout():
     logger.info(f"User {username} logged out successfully")
     return redirect(url_for('welcome'))
 
+@app.route('/notes')
+def notes():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    return render_template('notes.html')
+
+@app.route('/notes/new', methods=['GET', 'POST'])
+def notes_new():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        # Placeholder for saving note - for now just flash a message
+        flash('Note saved successfully!', 'success')
+        return redirect(url_for('notes'))
+    return render_template('notes_new.html')
+
 @app.route('/delete_post/<int:post_id>', methods=['DELETE'])
 def delete_post(post_id):
     if 'user' not in session:

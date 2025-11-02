@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSA Notes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>SSA Notes</h1>
+        <p>Take notes for your athletic performance and training.</p>
+        <a href="{{ url_for('notes_new') }}">Create New Note</a>
+        <div class="notes-list">
+            <!-- Placeholder for notes list -->
+            <p>No notes yet. <a href="{{ url_for('notes_new') }}">Create your first note</a>.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,10 +1,12 @@
-- [x] Add nickname field to User model in models.py
-- [x] Create migration for nickname field
-- [x] Add /edit_profile route in app.py (GET and POST)
-- [x] Create edit_profile.html template
-- [x] Update profile.html to link Edit Profile button to /edit_profile
-- [x] Remove inline edit form from profile.html
-- [ ] Add /upload_story route in app.py (GET and POST)
-- [ ] Create upload_story.html template
-- [ ] Update profile.html to display stories/reels
-- [ ] Add upload link in profile or dashboard
+# PWA Setup Tasks
+
+## Completed Tasks
+- [x] Create static/widget.html as a simple HTML placeholder for the PWA widget
+- [x] Create templates/notes.html as a simple placeholder page for notes
+- [x] Create templates/notes_new.html as a simple placeholder page for new notes
+- [x] Add Flask routes for /notes and /notes/new in app.py
+
+## Followup Steps
+- [ ] Run the Flask app locally
+- [ ] Clear browser cache and update manifest in browser dev tools
+- [ ] Test PWA installation in Chrome Canary or Edge

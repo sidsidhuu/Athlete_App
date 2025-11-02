@@ -1,71 +1,34 @@
 {
   "name": "SSA",
   "short_name": "SSA",
-  "description": "Smart Sports Athlete — AI-powered performance tracking and athlete report cards.",
-  "start_url": "https://athlete-app-jphm.onrender.com/",
-  "id": "https://athlete-app-jphm.onrender.com/",
+  "description": "Smart Sports Athlete — AI-powered performance tracking and athlete insights.",
+  "start_url": "https://athlete-app-jphm.onrender.com",
+  "id": "/",
   "display": "standalone",
-  "display_override": [
-    "standalone",
-    "fullscreen"
-  ],
+  "display_override": ["standalone", "fullscreen", "window-controls-overlay", "tabbed"],
   "background_color": "#ffffff",
   "theme_color": "#000000",
   "orientation": "portrait",
   "lang": "en",
   "dir": "ltr",
-  "scope": "https://athlete-app-jphm.onrender.com/",
-  "categories": [
-    "sports",
-    "athlete",
-    "health",
-    "fitness",
-    "performance"
-  ],
+  "scope": "/",
+  "categories": ["sports", "health", "fitness", "analytics"],
+
   "icons": [
     {
-      "src": "/static/abhinav_profile.jpg",
+      "src": "/static/icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/jpeg",
+      "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/static/abhinav_profile.jpg",
+      "src": "/static/icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/jpeg",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ],
-  "screenshots": [
-    {
-      "src": "/static/screenshots/screenshot1.png",
-      "sizes": "1920x1080",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Dashboard Overview"
-    },
-    {
-      "src": "/static/screenshots/screenshot2.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Athlete Performance Graph"
-    },
-    {
-      "src": "/static/screenshots/screenshot3.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Profile and Reports"
-    },
-    {
-      "src": "/static/screenshots/screenshot4.png",
-      "sizes": "1920x1080",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Activity History"
-    }
-  ],
+
   "shortcuts": [
     {
       "name": "View Dashboard",
@@ -84,15 +47,18 @@
       "url": "/performance"
     }
   ],
+
   "protocol_handlers": [
     {
       "protocol": "ssa",
       "url": "/profile?user=%s"
     }
   ],
+
   "launch_handler": {
     "client_mode": "auto"
   },
+
   "share_target": {
     "action": "/share",
     "method": "POST",
@@ -109,6 +75,7 @@
       ]
     }
   },
+
   "related_applications": [
     {
       "platform": "play",
@@ -118,11 +85,76 @@
   ],
   "prefer_related_applications": false,
 
+  "screenshots": [
+    {
+      "src": "/static/screenshots/screenshot1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Dashboard"
+    },
+    {
+      "src": "/static/screenshots/screenshot2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Performance Page"
+    },
+    {
+      "src": "/static/screenshots/screenshot3.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Profile Page"
+    },
+    {
+      "src": "/static/screenshots/screenshot4.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Settings Page"
+    }
+  ],
+
   "features": {
     "offline_support": true,
     "periodic_sync": true,
     "background_sync": true,
     "push_notifications": true,
-    "widgets": false
+    "widgets": true,
+    "edge_side_panel": true,
+    "window_controls_overlay": true,
+    "tabbed_display": true,
+    "note_taking": true
+  },
+
+  "file_handlers": [
+    {
+      "action": "/upload",
+      "accept": {
+        "image/*": [".png", ".jpg", ".jpeg"],
+        "application/pdf": [".pdf"]
+      }
+    }
+  ],
+
+  "widgets": [
+    {
+      "name": "SSA Quick Stats",
+      "description": "Shows athlete’s recent performance metrics",
+      "src": "/static/widget.html",
+      "type": "application/vnd.w3c.widget"
+    }
+  ],
+
+  "edge_side_panel": {
+    "preferred_width": 360,
+    "url": "/sidepanel"
+  },
+
+  "note_taking": {
+    "new_note_url": "/notes/new",
+    "targets": [
+      {
+        "name": "SSA Notes",
+        "url": "/notes"
+      }
+    ]
   }
 }
