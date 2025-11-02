@@ -407,6 +407,50 @@ def upload_story():
 
     return render_template('upload_story.html')
 
+@app.route('/upload_post', methods=['GET', 'POST'])
+def upload_post():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        content = request.form.get('content', '').strip()
+        media = request.files.get('media')
+        post_type = request.form.get('post_type', 'post')  # 'post' or 'reel'
+
+        if not media or media.filename == '':
+            flash('No media file selected', 'error')
+            return redirect(url_for('upload_post'))
+
+        # Determine media type
+        if media.filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+            media_type = 'photo'
+        elif media.filename.lower().endswith(('.mp4', '.avi', '.mov')):
+            media_type = 'video'
+        else:
+            flash('Invalid file type. Only images and videos allowed.', 'error')
+            return redirect(url_for('upload_post'))
+
+        filename = secure_filename(media.filename)
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        filename = f"{timestamp}_{filename}"
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], 'posts', filename)
+        media.save(filepath)
+
+        # Create post
+        user = User.query.filter_by(username=session['user']).first()
+        new_post = Post(
+            content=content,
+            video_path=filename if media_type == 'video' else None,
+            activity_type=post_type,  # Use activity_type to distinguish 'post' vs 'reel'
+            user_id=user.id
+        )
+        db.session.add(new_post)
+        db.session.commit()
+
+        flash('Post uploaded successfully!', 'success')
+        return redirect(url_for('profile'))
+
+    return render_template('upload_post.html')
+
 def allowed_file(filename):
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

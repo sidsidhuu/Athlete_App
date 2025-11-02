@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Post - Athlete App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Upload Post</h1>
+            <nav>
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </nav>
+        </header>
+
+        <main>
+            <form action="{{ url_for('upload_post') }}" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="content">Content:</label>
+                    <textarea name="content" id="content" rows="4" placeholder="What's on your mind?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="media">Media:</label>
+                    <input type="file" name="media" id="media" accept="image/*,video/*" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="post_type">Post Type:</label>
+                    <select name="post_type" id="post_type">
+                        <option value="post">Post</option>
+                        <option value="reel">Reel</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn">Upload Post</button>
+            </form>
+        </main>
+    </div>
+</body>
+</html>
