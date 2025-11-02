@@ -116,5 +116,13 @@
       "id": "com.ssa.app"
     }
   ],
-  "prefer_related_applications": false
+  "prefer_related_applications": false,
+
+  "features": {
+    "offline_support": true,
+    "periodic_sync": true,
+    "background_sync": true,
+    "push_notifications": true,
+    "widgets": false
+  }
 }
