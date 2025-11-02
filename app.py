@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for, flash
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, flash, send_from_directory, current_app
 from flask_session import Session
 from flask_migrate import Migrate
 from flask_mail import Mail, Message
@@ -546,6 +546,10 @@ def notes_new():
         flash('Note saved successfully!', 'success')
         return redirect(url_for('notes'))
     return render_template('notes_new.html')
+
+@app.route('/service-worker.js')
+def service_worker():
+    return send_from_directory(current_app.static_folder, 'service-worker.js')
 
 @app.route('/delete_post/<int:post_id>', methods=['DELETE'])
 def delete_post(post_id):
