@@ -2,8 +2,14 @@
   "name": "SSA",
   "short_name": "SSA",
   "description": "Smart Sports Athlete — AI-powered performance tracking and athlete insights.",
-  "start_url": "https://athlete-app-jphm.onrender.com",
   "id": "/",
+  "start_url": "https://athlete-app-jphm.onrender.com",
+  "scope": "/",
+  "scope_extensions": [
+    {
+      "origin": "https://athlete-app-jphm.onrender.com"
+    }
+  ],
   "display": "standalone",
   "display_override": [
     "standalone",
@@ -15,18 +21,13 @@
   "orientation": "portrait",
   "lang": "en",
   "dir": "ltr",
-  "scope": "/",
-  "scope_extensions": [
-    {
-      "origin": "https://athlete-app-jphm.onrender.com"
-    }
-  ],
   "categories": [
     "sports",
     "health",
     "fitness",
     "analytics"
   ],
+
   "icons": [
     {
       "src": "/static/icon-192x192.png",
@@ -47,24 +48,27 @@
       "purpose": "any"
     }
   ],
+
   "shortcuts": [
     {
-      "name": "View Dashboard",
+      "name": "Dashboard",
       "short_name": "Dashboard",
       "url": "/dashboard",
       "icons": [
         {
           "src": "/static/icon-192x192.png",
-          "sizes": "192x192"
+          "sizes": "192x192",
+          "type": "image/png"
         }
       ]
     },
     {
-      "name": "My Performance",
+      "name": "Performance",
       "short_name": "Performance",
       "url": "/performance"
     }
   ],
+
   "screenshots": [
     {
       "src": "/static/screenshots/screenshot1.png",
@@ -77,15 +81,18 @@
       "type": "image/png"
     }
   ],
+
   "protocol_handlers": [
     {
       "protocol": "ssa",
       "url": "/profile?user=%s"
     }
   ],
+
   "launch_handler": {
     "client_mode": "auto"
   },
+
   "file_handlers": [
     {
       "action": "/upload",
@@ -94,22 +101,32 @@
       }
     }
   ],
+
   "widgets": [
     {
       "name": "Performance Widget",
-      "description": "Quick stats on your recent sessions",
+      "description": "Quick stats on your recent sessions.",
       "src": "/static/widget.html",
       "type": "application/vnd.w3c.widget",
       "sizes": "320x240"
     }
   ],
+
   "edge_side_panel": {
     "preferred_width": 380
   },
+
   "window_controls_overlay": {
     "visible": true
   },
+
   "iarc_rating_id": "e1234567890",
+
+  "offline_capabilities": {
+    "service_worker": "/service-worker.js",
+    "resources": ["/", "/dashboard", "/performance", "/static/icon-192x192.png"]
+  },
+
   "share_target": {
     "action": "/share",
     "method": "POST",
@@ -126,6 +143,7 @@
       ]
     }
   },
+
   "related_applications": [
     {
       "platform": "play",
