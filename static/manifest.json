@@ -16,17 +16,13 @@
     "tabbed",
     "window-controls-overlay"
   ],
+  "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#000000",
-  "orientation": "portrait",
   "lang": "en",
   "dir": "ltr",
-  "categories": [
-    "sports",
-    "health",
-    "fitness",
-    "analytics"
-  ],
+
+  "categories": ["sports", "health", "fitness", "analytics"],
 
   "icons": [
     {
@@ -51,46 +47,48 @@
 
   "shortcuts": [
     {
-      "name": "Dashboard",
+      "name": "View Dashboard",
       "short_name": "Dashboard",
       "url": "/dashboard",
       "icons": [
-        {
-          "src": "/static/icon-192x192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
+        { "src": "/static/icon-192x192.png", "sizes": "192x192" }
       ]
     },
     {
-      "name": "Performance",
+      "name": "My Performance",
       "short_name": "Performance",
       "url": "/performance"
     }
   ],
 
-  "screenshots": [
+  "widgets": [
     {
-      "src": "/static/screenshots/screenshot1.png",
-      "sizes": "1280x720",
-      "type": "image/png"
+      "name": "Performance Widget",
+      "description": "Quick stats on your recent sessions",
+      "src": "/static/widget.html",
+      "type": "application/vnd.w3c.widget",
+      "sizes": "320x240"
     },
     {
-      "src": "/static/screenshots/screenshot2.png",
-      "sizes": "1280x720",
-      "type": "image/png"
+      "name": "Training Notes Widget",
+      "description": "Capture quick training notes directly from your home screen.",
+      "src": "/static/note_taking.html",
+      "type": "application/vnd.w3c.widget",
+      "sizes": "320x240"
     }
   ],
 
-  "protocol_handlers": [
-    {
-      "protocol": "ssa",
-      "url": "/profile?user=%s"
-    }
-  ],
+  "edge_side_panel": { "preferred_width": 380 },
+  "window_controls_overlay": { "visible": true },
 
-  "launch_handler": {
-    "client_mode": "auto"
+  "note_taking": {
+    "new_note_url": "/notes/new",
+    "targets": [
+      {
+        "name": "SSA Notes",
+        "url": "/notes"
+      }
+    ]
   },
 
   "file_handlers": [
@@ -102,30 +100,13 @@
     }
   ],
 
-  "widgets": [
-    {
-      "name": "Performance Widget",
-      "description": "Quick stats on your recent sessions.",
-      "src": "/static/widget.html",
-      "type": "application/vnd.w3c.widget",
-      "sizes": "320x240"
-    }
+  "launch_handler": { "client_mode": "auto" },
+
+  "protocol_handlers": [
+    { "protocol": "ssa", "url": "/profile?user=%s" }
   ],
 
-  "edge_side_panel": {
-    "preferred_width": 380
-  },
-
-  "window_controls_overlay": {
-    "visible": true
-  },
-
   "iarc_rating_id": "e1234567890",
-
-  "offline_capabilities": {
-    "service_worker": "/service-worker.js",
-    "resources": ["/", "/dashboard", "/performance", "/static/icon-192x192.png"]
-  },
 
   "share_target": {
     "action": "/share",
@@ -151,5 +132,6 @@
       "id": "com.ssa.app"
     }
   ],
+
   "prefer_related_applications": false
 }
