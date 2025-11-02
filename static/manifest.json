@@ -1,19 +1,27 @@
 {
   "name": "SSA",
   "short_name": "SSA",
-  "description": "Smart Sports Analytics — AI-powered performance tracking and athlete insights.",
-  "start_url": "https://athlete-app-jphm.onrender.com",
-  "id": "/",
+  "description": "Smart Sports Athlete — AI-powered performance tracking and athlete report cards.",
+  "start_url": "https://athlete-app-jphm.onrender.com/",
+  "id": "https://athlete-app-jphm.onrender.com/",
   "display": "standalone",
-  "display_override": ["standalone", "fullscreen"],
+  "display_override": [
+    "standalone",
+    "fullscreen"
+  ],
   "background_color": "#ffffff",
   "theme_color": "#000000",
   "orientation": "portrait",
   "lang": "en",
   "dir": "ltr",
-  "scope": "/",
-  "categories": ["sports", "health", "fitness", "analytics"],
-
+  "scope": "https://athlete-app-jphm.onrender.com/",
+  "categories": [
+    "sports",
+    "athlete",
+    "health",
+    "fitness",
+    "performance"
+  ],
   "icons": [
     {
       "src": "/static/icon-192x192.png",
@@ -28,13 +36,47 @@
       "purpose": "any maskable"
     }
   ],
-
+  "screenshots": [
+    {
+      "src": "/static/screenshots/screenshot1.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Dashboard Overview"
+    },
+    {
+      "src": "/static/screenshots/screenshot2.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Athlete Performance Graph"
+    },
+    {
+      "src": "/static/screenshots/screenshot3.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Profile and Reports"
+    },
+    {
+      "src": "/static/screenshots/screenshot4.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Activity History"
+    }
+  ],
   "shortcuts": [
     {
       "name": "View Dashboard",
       "short_name": "Dashboard",
       "url": "/dashboard",
-      "icons": [{ "src": "/static/icon-192x192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/static/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "My Performance",
@@ -42,18 +84,15 @@
       "url": "/performance"
     }
   ],
-
   "protocol_handlers": [
     {
       "protocol": "ssa",
       "url": "/profile?user=%s"
     }
   ],
-
   "launch_handler": {
     "client_mode": "auto"
   },
-
   "share_target": {
     "action": "/share",
     "method": "POST",
@@ -62,10 +101,14 @@
       "title": "title",
       "text": "text",
       "url": "url",
-      "files": [{ "name": "files", "accept": ["image/*"] }]
+      "files": [
+        {
+          "name": "files",
+          "accept": ["image/*"]
+        }
+      ]
     }
   },
-
   "related_applications": [
     {
       "platform": "play",
@@ -73,6 +116,5 @@
       "id": "com.ssa.app"
     }
   ],
-
   "prefer_related_applications": false
 }
