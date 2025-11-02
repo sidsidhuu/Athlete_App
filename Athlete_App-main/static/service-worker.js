@@ -1,7 +1,7 @@
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open('v1').then(cache => {
-      return cache.addAll(['/', '/welcome', '/static/styles.css', '/static/script.js']);
+      return cache.addAll(['/', '/welcome', '/static/styles.css', '/static/script.js', '/static/manifest.json']);
     })
   );
 });
