@@ -2,15 +2,18 @@
   "name": "SSA",
   "short_name": "SSA",
   "description": "Smart Sports Analytics — AI-powered performance tracking and athlete insights.",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "https://athlete-app-jphm.onrender.com",
   "id": "/",
   "display": "standalone",
-  "orientation": "portrait",
+  "display_override": ["standalone", "fullscreen"],
   "background_color": "#ffffff",
   "theme_color": "#000000",
+  "orientation": "portrait",
   "lang": "en",
-  "dir": "auto",
+  "dir": "ltr",
+  "scope": "/",
+  "categories": ["sports", "health", "fitness", "analytics"],
+
   "icons": [
     {
       "src": "/static/icon-192x192.png",
@@ -25,18 +28,51 @@
       "purpose": "any maskable"
     }
   ],
-  "screenshots": [
+
+  "shortcuts": [
     {
-      "src": "/static/screenshot1.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "label": "SSA dashboard screen"
+      "name": "View Dashboard",
+      "short_name": "Dashboard",
+      "url": "/dashboard",
+      "icons": [{ "src": "/static/icon-192x192.png", "sizes": "192x192" }]
     },
     {
-      "src": "/static/screenshot2.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "label": "Athlete performance report"
+      "name": "My Performance",
+      "short_name": "Performance",
+      "url": "/performance"
     }
-  ]
+  ],
+
+  "protocol_handlers": [
+    {
+      "protocol": "ssa",
+      "url": "/profile?user=%s"
+    }
+  ],
+
+  "launch_handler": {
+    "client_mode": "auto"
+  },
+
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [{ "name": "files", "accept": ["image/*"] }]
+    }
+  },
+
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.ssa.app",
+      "id": "com.ssa.app"
+    }
+  ],
+
+  "prefer_related_applications": false
 }
