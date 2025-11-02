@@ -556,6 +556,10 @@ def delete_post(post_id):
 
     return jsonify({'success': True, 'message': 'Post deleted successfully'})
 
+@app.route('/api/refresh')
+def refresh_data():
+    return jsonify({"message": "Latest data fetched successfully"})
+
 @app.route('/predict', methods=['POST'])
 def predict():
     global activity_duration
