@@ -74,3 +74,31 @@ async function fetchAndCacheData() {
     console.error('❌ Periodic Sync failed:', error);
   }
 }
+
+// Push notifications handler
+self.addEventListener('push', event => {
+  const data = event.data.json();
+  event.waitUntil(
+    self.registration.showNotification(data.title, {
+      body: data.body,
+      icon: '/static/icon-192x192.png'
+    })
+  );
+});
+
+// Background sync handler
+self.addEventListener('sync', event => {
+  if (event.tag === 'sync-athlete-data') {
+    event.waitUntil(syncAthleteData());
+  }
+});
+
+async function syncAthleteData() {
+  // Example: send stored workout results to server
+  const data = await getStoredWorkouts();
+  await fetch('/api/sync', {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
