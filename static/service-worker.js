@@ -56,6 +56,21 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// Optional: push / sync handlers (add if you need them)
-// self.addEventListener('push', ...)
-// self.addEventListener('sync', ...)
+// Periodic Sync: fetch latest data in background
+self.addEventListener('periodicsync', (event) => {
+  if (event.tag === 'fetch-latest-data') {
+    event.waitUntil(fetchAndCacheData());
+  }
+});
+
+async function fetchAndCacheData() {
+  try {
+    const response = await fetch('/api/refresh'); // Use existing refresh endpoint
+    const data = await response.json();
+    const cache = await caches.open(CACHE_NAME);
+    await cache.put('/latest-data', new Response(JSON.stringify(data)));
+    console.log('✅ Background data updated!');
+  } catch (error) {
+    console.error('❌ Periodic Sync failed:', error);
+  }
+}
