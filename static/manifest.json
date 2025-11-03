@@ -132,10 +132,6 @@
   },
 
   "iarc_rating_id": "IARC-123abc456def789ghi",
-  "scope_extensions": [
-    { "origin": "https://auth.ssa.smartathlete.com" },
-    { "origin": "https://api.ssa.smartathlete.com" }
-  ],
   "screenshots": [
     {
       "src": "/static/screenshots/screenshot-wide.png",
