@@ -7,7 +7,8 @@
   "scope": "/",
   "scope_extensions": [
     { "origin": "https://athlete-app-jphm.onrender.com" },
-    { "origin": "https://auth.athlete-app-jphm.onrender.com" }
+    { "origin": "https://auth.athlete-app-jphm.onrender.com" },
+    { "origin": "https://api.athlete-app-jphm.onrender.com" }
   ],
   "display": "standalone",
   "display_override": [
