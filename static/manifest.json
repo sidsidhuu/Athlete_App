@@ -3,6 +3,7 @@
   "short_name": "SSA",
   "start_url": "https://ssa.smartathlete.com/",
   "scope": "https://ssa.smartathlete.com/",
+  "display_override": ["tabbed", "standalone"],
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0078D7",
