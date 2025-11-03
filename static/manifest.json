@@ -11,8 +11,8 @@
   ],
   "display": "standalone",
   "display_override": [
-    "standalone",
     "tabbed",
+    "standalone",
     "window-controls-overlay"
   ],
   "orientation": "portrait",
