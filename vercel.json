@@ -4,5 +4,6 @@
   ],
   "routes": [
     { "src": "/(.*)", "dest": "app.py" }
-  ]
+  ],
+  "buildCommand": "pip install --upgrade pip setuptools wheel && pip install --default-timeout=200 --retries=10 --resume-retries --no-cache-dir -r requirements.txt"
 }
