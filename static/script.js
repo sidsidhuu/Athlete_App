@@ -141,7 +141,13 @@ function startActivityRecognition(activity) {
 function startWebRecognition(activity) {
     // Start web-based camera recognition for the specific activity
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: true })
+        navigator.mediaDevices.getUserMedia({
+            video: {
+                width: { ideal: 640 },
+                height: { ideal: 480 },
+                facingMode: 'user'
+            }
+        })
             .then(function(stream) {
                 const video = document.getElementById('video');
                 const canvas = document.getElementById('canvas');
@@ -195,7 +201,7 @@ function startWebRecognition(activity) {
             })
             .catch(function(err) {
                 console.error('Error accessing camera:', err);
-                alert('Error accessing camera. Please allow camera access.');
+                alert('Error accessing camera. Please allow camera access and make sure no other application is using the camera.');
             });
     }
 }
@@ -298,7 +304,13 @@ function addGamingChallenge(e) {
 
 async function startRecognition() {
     try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+                width: { ideal: 640 },
+                height: { ideal: 480 },
+                facingMode: 'user'
+            }
+        });
         video.srcObject = stream;
         video.style.display = 'block';  // Show video when started
         startBtn.style.display = 'none';
@@ -309,7 +321,7 @@ async function startRecognition() {
         intervalId = setInterval(captureAndPredict, 1000);
     } catch (err) {
         console.error('Error accessing camera:', err);
-        alert('Error accessing camera. Please allow camera access.');
+        alert('Error accessing camera. Please allow camera access and make sure no other application is using the camera.');
     }
 }
 
