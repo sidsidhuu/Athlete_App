@@ -10,32 +10,13 @@
     <nav>
         <div class="nav-container">
             <h2>Athlete Activity Recognition</h2>
-            <div class="nav-right">
-                <a href="{{ url_for('profile') }}" class="profile-icon-link">
-                    <div class="profile-icon" id="profileIcon" style="position: relative;">
-                        {% if session.get('profile_photo') %}
-                            <img src="{{ url_for('static', filename='uploads/profiles/' + session['profile_photo']) }}" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-                        {% else %}
-                            {{ session['user'][0].upper() }}
-                        {% endif %}
-                        {% if session.get('nickname') %}
-                            <div class="nickname-overlay">@{{ session['nickname'] }}</div>
-                        {% endif %}
-                    </div>
-                </a>
-                <div class="profile-menu" id="profileMenu">
-                    <div class="profile-details">
-                        <p><strong>{{ session['user'] }}</strong></p>
-                        {% if session.get('nickname') %}
-                            <p>@{{ session['nickname'] }}</p>
-                        {% endif %}
-                        <p>{{ session.get('email', 'N/A') }}</p>
-                    </div>
-                    <a href="{{ url_for('profile') }}" class="btn">View Profile</a>
-                    <a href="{{ url_for('settings') }}" class="btn">Settings</a>
-                    <button class="logout-btn" onclick="window.location.href='{{ url_for('logout') }}'">Logout</button>
-                </div>
-            </div>
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('athlete_fitness') }}">Athlete Fitness</a></li>
+                <li><a href="{{ url_for('settings') }}">Settings</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
         </div>
     </nav>
 

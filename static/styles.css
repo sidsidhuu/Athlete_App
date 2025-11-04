@@ -110,20 +110,6 @@ nav {
     box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
 }
 
-.nickname-overlay {
-    position: absolute;
-    bottom: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 2px 6px;
-    border-radius: 10px;
-    font-size: 10px;
-    font-weight: bold;
-    white-space: nowrap;
-}
-
 .profile-menu {
     position: absolute;
     top: 60px;

@@ -1,7 +1,6 @@
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for, flash, send_from_directory, current_app
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, flash
 from flask_session import Session
 from flask_migrate import Migrate
-from flask_mail import Mail, Message
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 import cv2
@@ -55,8 +54,6 @@ import time
 import subprocess
 import threading
 import os
-import random
-import string
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here_change_in_production_123456789'  # Change this in production
@@ -65,16 +62,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.abspath('instance
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB max file size
-
-# Email configuration (update with your SMTP settings)
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'your_email@gmail.com'  # Replace with your email
-app.config['MAIL_PASSWORD'] = 'your_app_password'  # Replace with app password
-app.config['MAIL_DEFAULT_SENDER'] = 'your_email@gmail.com'  # Replace with your email
-
-mail = Mail(app)
 
 # Ensure upload folder exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -264,37 +251,7 @@ def profile():
         session['height'] = user.height
         session['weight'] = user.weight
         session['profile_photo'] = user.profile_photo
-        session['nickname'] = user.nickname
-    return render_template('profile.html', user=user)
-
-@app.route('/edit_profile', methods=['GET', 'POST'])
-def edit_profile():
-    if 'user' not in session:
-        return redirect(url_for('login'))
-    user = User.query.filter_by(username=session['user']).first()
-    if request.method == 'POST':
-        username = request.form['username']
-        nickname = request.form.get('nickname', '').strip()
-        # Check if username is taken by another user
-        existing_user = User.query.filter_by(username=username).first()
-        if existing_user and existing_user.id != user.id:
-            flash('Username already taken', 'error')
-            return redirect(url_for('edit_profile'))
-        # Check if nickname is taken by another user
-        if nickname:
-            existing_nick = User.query.filter_by(nickname=nickname).first()
-            if existing_nick and existing_nick.id != user.id:
-                flash('Nickname already taken', 'error')
-                return redirect(url_for('edit_profile'))
-        # Update user
-        user.username = username
-        user.nickname = nickname if nickname else None
-        db.session.commit()
-        session['user'] = username
-        session['nickname'] = nickname
-        flash('Profile updated successfully', 'success')
-        return redirect(url_for('profile'))
-    return render_template('edit_profile.html')
+    return render_template('profile.html')
 
 @app.route('/upload_profile_photo', methods=['POST'])
 def upload_profile_photo():
@@ -328,200 +285,9 @@ def upload_profile_photo():
     else:
         return jsonify({'success': False, 'message': 'Invalid file type'}), 400
 
-@app.route('/update_profile_photo', methods=['POST'])
-def update_profile_photo():
-    if 'user' not in session:
-        return redirect(url_for('login'))
-
-    if 'profile_photo' not in request.files:
-        flash('No file provided', 'error')
-        return redirect(url_for('edit_profile'))
-
-    file = request.files['profile_photo']
-    if file.filename == '':
-        flash('No file selected', 'error')
-        return redirect(url_for('edit_profile'))
-
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        # Add timestamp to make filename unique
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        filename = f"{timestamp}_{filename}"
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], 'profiles', filename)
-        file.save(filepath)
-
-        # Update user's profile photo in database
-        user = User.query.filter_by(username=session['user']).first()
-        if user:
-            user.profile_photo = filename
-            db.session.commit()
-            session['profile_photo'] = filename
-            flash('Profile photo updated successfully', 'success')
-        else:
-            flash('User not found', 'error')
-    else:
-        flash('Invalid file type', 'error')
-
-    return redirect(url_for('edit_profile'))
-
-@app.route('/upload_story', methods=['GET', 'POST'])
-def upload_story():
-    if 'user' not in session:
-        return redirect(url_for('login'))
-    if request.method == 'POST':
-        content = request.form.get('content', '').strip()
-        media = request.files.get('media')
-
-        if not media or media.filename == '':
-            flash('No media file selected', 'error')
-            return redirect(url_for('upload_story'))
-
-        # Determine media type
-        if media.filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
-            media_type = 'photo'
-        elif media.filename.lower().endswith(('.mp4', '.avi', '.mov')):
-            media_type = 'video'
-        else:
-            flash('Invalid file type. Only images and videos allowed.', 'error')
-            return redirect(url_for('upload_story'))
-
-        filename = secure_filename(media.filename)
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        filename = f"{timestamp}_{filename}"
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], 'stories', filename)
-        media.save(filepath)
-
-        # Create story
-        user = User.query.filter_by(username=session['user']).first()
-        new_story = Story(
-            content=content,
-            media_path=filename,
-            media_type=media_type,
-            user_id=user.id
-        )
-        db.session.add(new_story)
-        db.session.commit()
-
-        flash('Story uploaded successfully!', 'success')
-        return redirect(url_for('profile'))
-
-    return render_template('upload_story.html')
-
-@app.route('/upload_post', methods=['GET', 'POST'])
-def upload_post():
-    if 'user' not in session:
-        return redirect(url_for('login'))
-    if request.method == 'POST':
-        content = request.form.get('content', '').strip()
-        media = request.files.get('media')
-        post_type = request.form.get('post_type', 'post')  # 'post' or 'reel'
-
-        if not media or media.filename == '':
-            flash('No media file selected', 'error')
-            return redirect(url_for('upload_post'))
-
-        # Determine media type
-        if media.filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
-            media_type = 'photo'
-        elif media.filename.lower().endswith(('.mp4', '.avi', '.mov')):
-            media_type = 'video'
-        else:
-            flash('Invalid file type. Only images and videos allowed.', 'error')
-            return redirect(url_for('upload_post'))
-
-        filename = secure_filename(media.filename)
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        filename = f"{timestamp}_{filename}"
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], 'posts', filename)
-        media.save(filepath)
-
-        # Create post
-        user = User.query.filter_by(username=session['user']).first()
-        new_post = Post(
-            content=content,
-            video_path=filename if media_type == 'video' else None,
-            activity_type=post_type,  # Use activity_type to distinguish 'post' vs 'reel'
-            user_id=user.id
-        )
-        db.session.add(new_post)
-        db.session.commit()
-
-        flash('Post uploaded successfully!', 'success')
-        return redirect(url_for('profile'))
-
-    return render_template('upload_post.html')
-
 def allowed_file(filename):
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-@app.route('/forgot_password', methods=['GET', 'POST'])
-def forgot_password():
-    if request.method == 'POST':
-        email = request.form['email']
-        user = User.query.filter_by(email=email).first()
-        if user:
-            # Generate OTP
-            otp = ''.join(random.choices(string.digits, k=6))
-            session['reset_otp'] = otp
-            session['reset_email'] = email
-            session['otp_timestamp'] = time.time()
-
-            # Send OTP email
-            msg = Message('Password Reset OTP', recipients=[email])
-            msg.body = f'Your OTP for password reset is: {otp}. This OTP will expire in 10 minutes.'
-            try:
-                mail.send(msg)
-                flash('OTP sent to your email. Please check your inbox.', 'success')
-                return redirect(url_for('reset_password'))
-            except Exception as e:
-                logger.error(f"Failed to send OTP email: {e}")
-                flash('Failed to send OTP. Please try again.', 'error')
-        else:
-            flash('Email not found.', 'error')
-    return render_template('forgot_password.html')
-
-@app.route('/reset_password', methods=['GET', 'POST'])
-def reset_password():
-    if 'reset_otp' not in session or 'reset_email' not in session:
-        flash('Please request a password reset first.', 'error')
-        return redirect(url_for('forgot_password'))
-
-    # Check OTP expiration (10 minutes)
-    if time.time() - session.get('otp_timestamp', 0) > 600:
-        session.pop('reset_otp', None)
-        session.pop('reset_email', None)
-        session.pop('otp_timestamp', None)
-        flash('OTP has expired. Please request a new one.', 'error')
-        return redirect(url_for('forgot_password'))
-
-    if request.method == 'POST':
-        otp = request.form['otp']
-        new_password = request.form['new_password']
-        confirm_password = request.form['confirm_password']
-
-        if otp != session['reset_otp']:
-            flash('Invalid OTP.', 'error')
-            return render_template('reset_password.html')
-
-        if new_password != confirm_password:
-            flash('Passwords do not match.', 'error')
-            return render_template('reset_password.html')
-
-        # Update password
-        user = User.query.filter_by(email=session['reset_email']).first()
-        if user:
-            user.password = generate_password_hash(new_password)
-            db.session.commit()
-            session.pop('reset_otp', None)
-            session.pop('reset_email', None)
-            session.pop('otp_timestamp', None)
-            flash('Password reset successfully. Please login.', 'success')
-            return redirect(url_for('login'))
-        else:
-            flash('User not found.', 'error')
-
-    return render_template('reset_password.html')
 
 @app.route('/logout')
 def logout():
@@ -530,55 +296,6 @@ def logout():
     session.pop('user_id', None)
     logger.info(f"User {username} logged out successfully")
     return redirect(url_for('welcome'))
-
-@app.route('/notes')
-def notes():
-    if 'user' not in session:
-        return redirect(url_for('login'))
-    return render_template('notes.html')
-
-@app.route('/notes/new', methods=['GET', 'POST'])
-def notes_new():
-    if 'user' not in session:
-        return redirect(url_for('login'))
-    if request.method == 'POST':
-        # Placeholder for saving note - for now just flash a message
-        flash('Note saved successfully!', 'success')
-        return redirect(url_for('notes'))
-    return render_template('notes_new.html')
-
-@app.route('/service-worker.js')
-def service_worker():
-    return send_from_directory(current_app.static_folder, 'service-worker.js')
-
-@app.route('/delete_post/<int:post_id>', methods=['DELETE'])
-def delete_post(post_id):
-    if 'user' not in session:
-        return jsonify({'success': False, 'message': 'Not logged in'}), 401
-
-    user = User.query.filter_by(username=session['user']).first()
-    if not user:
-        return jsonify({'success': False, 'message': 'User not found'}), 404
-
-    post = Post.query.filter_by(id=post_id, user_id=user.id).first()
-    if not post:
-        return jsonify({'success': False, 'message': 'Post not found or not owned by user'}), 404
-
-    # Delete the file if it exists
-    if post.video_path:
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], 'posts', post.video_path)
-        if os.path.exists(file_path):
-            os.remove(file_path)
-
-    # Delete the post from database
-    db.session.delete(post)
-    db.session.commit()
-
-    return jsonify({'success': True, 'message': 'Post deleted successfully'})
-
-@app.route('/api/refresh')
-def refresh_data():
-    return jsonify({"message": "Latest data fetched successfully"})
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -633,4 +350,4 @@ def predict():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=False)
+    app.run(host='0.0.0.0', port=port, debug=True)

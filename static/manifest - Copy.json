@@ -1,0 +1,151 @@
+{
+  "name": "SSA - Smart Sports Athlete",
+  "short_name": "SSA",
+  "start_url": "https://ssa.smartathlete.com/",
+  "scope": "https://ssa.smartathlete.com/",
+  "display_override": ["tabbed", "standalone"],
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0078D7",
+  "description": "An AI-powered sports performance tracking and analytics platform for athletes.",
+  "categories": ["sports", "health", "fitness", "analytics"],
+
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+
+  "shortcuts": [
+    {
+      "name": "View Dashboard",
+      "short_name": "Dashboard",
+      "url": "/dashboard",
+      "icons": [
+        { "src": "/static/icon-192x192.png", "sizes": "192x192", "type": "image/png" }
+      ]
+    },
+    {
+      "name": "My Performance",
+      "short_name": "Performance",
+      "url": "/performance",
+      "icons": [
+        { "src": "/static/icon-192x192.png", "sizes": "192x192", "type": "image/png" }
+      ]
+    },
+    {
+      "name": "Profile",
+      "short_name": "Profile",
+      "url": "/profile",
+      "icons": [
+        { "src": "/static/icon-192x192.png", "sizes": "192x192", "type": "image/png" }
+      ]
+    }
+  ],
+
+  "widgets": [
+    {
+      "name": "Performance Widget",
+      "description": "Quick stats on your recent sessions",
+      "src": "/static/widget.html",
+      "type": "application/vnd.w3c.widget",
+      "sizes": "320x240"
+    },
+    {
+      "name": "Training Notes Widget",
+      "description": "Capture quick training notes directly from your home screen.",
+      "src": "/static/note_taking.html",
+      "type": "application/vnd.w3c.widget",
+      "sizes": "320x240"
+    }
+  ],
+
+  "edge_side_panel": { "preferred_width": 380 },
+  "window_controls_overlay": { "visible": true },
+
+  "note_taking": {
+    "new_note_url": "/notes/new",
+    "targets": [
+      {
+        "name": "SSA Notes",
+        "url": "/notes"
+      }
+    ]
+  },
+
+  "file_handlers": [
+    {
+      "action": "/upload",
+      "accept": {
+        "image/*": [".png", ".jpg", ".jpeg"]
+      }
+    }
+  ],
+
+  "launch_handler": { "client_mode": "auto" },
+
+  "protocol_handlers": [
+    { "protocol": "ssa", "url": "/profile?user=%s" }
+  ],
+
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "files",
+          "accept": ["image/*"]
+        }
+      ]
+    }
+  },
+
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.ssa.app",
+      "id": "com.ssa.app"
+    }
+  ],
+
+  "prefer_related_applications": false,
+
+  "permissions": {
+    "background-sync": {
+      "description": "Used to sync athlete performance data when internet connection is restored."
+    },
+    "notifications": {
+      "description": "Used to send important sports updates and alerts."
+    }
+  },
+
+  "iarc_rating_id": "IARC-123abc456def789ghi",
+  "screenshots": [
+    {
+      "src": "/static/screenshots/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Desktop view"
+    },
+    {
+      "src": "/static/screenshots/screenshot-narrow.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobile view"
+    }
+  ]
+}

@@ -49,9 +49,8 @@
                 </div>
                 <p class="bio">{{ session.get('bio', 'Fitness enthusiast | Activity tracker') }}</p>
                 <div class="profile-actions">
-                    <a href="{{ url_for('edit_profile') }}" class="btn">Edit Profile</a>
-                    <a href="{{ url_for('upload_story') }}" class="btn">Upload Story</a>
-                    <a href="{{ url_for('upload_post') }}" class="btn">Upload Post</a>
+                    <button id="editProfileBtn" class="btn">Edit Profile</button>
+                    <button id="uploadPhotoBtn" class="btn">Upload Photo</button>
                 </div>
             </div>
         </div>
@@ -84,61 +83,27 @@
 
             <div class="tab-content">
                 <div id="posts" class="content-section active">
-                    <div class="posts-grid">
-                        {% for post in user.posts if post.activity_type != 'reel' %}
-                            <div class="post-item">
-                                {% if post.video_path %}
-                                    <video controls>
-                                        <source src="{{ url_for('static', filename='uploads/posts/' + post.video_path) }}" type="video/mp4">
-                                    </video>
-                                {% endif %}
-                                {% if post.content %}
-                                    <p>{{ post.content }}</p>
-                                {% endif %}
-                                <small>{{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
-                                <button class="delete-btn" onclick="deletePost({{ post.id }})">Delete</button>
-                            </div>
-                        {% else %}
-                            <div class="empty-state">
-                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="1" opacity="0.3"/>
-                                    <circle cx="9.5" cy="9.5" r="1.5" fill="currentColor" opacity="0.3"/>
-                                    <path d="M21 15l-3.086-3.086a2 2 0 00-2.828 0L6 21" stroke="currentColor" stroke-width="1" opacity="0.3"/>
-                                </svg>
-                                <h3>No Posts Yet</h3>
-                                <p>Share your fitness activities and achievements!</p>
-                                <a href="{{ url_for('upload_post') }}" class="btn primary">Create Your First Post</a>
-                            </div>
-                        {% endfor %}
+                    <div class="empty-state">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+                            <circle cx="9.5" cy="9.5" r="1.5" fill="currentColor" opacity="0.3"/>
+                            <path d="M21 15l-3.086-3.086a2 2 0 00-2.828 0L6 21" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+                        </svg>
+                        <h3>No Posts Yet</h3>
+                        <p>Share your fitness activities and achievements!</p>
+                        <button class="btn primary">Create Your First Post</button>
                     </div>
                 </div>
 
                 <div id="reels" class="content-section">
-                    <div class="stories-grid">
-                        {% for post in user.posts if post.activity_type == 'reel' %}
-                            <div class="story-item">
-                                {% if post.video_path %}
-                                    <video controls>
-                                        <source src="{{ url_for('static', filename='uploads/posts/' + post.video_path) }}" type="video/mp4">
-                                    </video>
-                                {% endif %}
-                                {% if post.content %}
-                                    <p>{{ post.content }}</p>
-                                {% endif %}
-                                <small>{{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
-                                <button class="delete-btn" onclick="deletePost({{ post.id }})">Delete</button>
-                            </div>
-                        {% else %}
-                            <div class="empty-state">
-                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="1" opacity="0.3"/>
-                                    <polygon points="9,6 9,18 17,12" fill="currentColor" opacity="0.3"/>
-                                </svg>
-                                <h3>No Reels Yet</h3>
-                                <p>Share your fitness journey with reels!</p>
-                                <a href="{{ url_for('upload_post') }}" class="btn primary">Upload Your First Reel</a>
-                            </div>
-                        {% endfor %}
+                    <div class="empty-state">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+                            <polygon points="9,6 9,18 17,12" fill="currentColor" opacity="0.3"/>
+                        </svg>
+                        <h3>No Reels Yet</h3>
+                        <p>Record and share your workout videos!</p>
+                        <button class="btn primary">Create Your First Reel</button>
                     </div>
                 </div>
 
@@ -155,34 +120,43 @@
             </div>
         </div>
 
+        <div class="edit-profile-form" id="editProfileForm" style="display:none;">
+            <h2>Edit Profile</h2>
+            <form id="profileForm">
+                <div class="form-group">
+                    <label for="editUsername">Username:</label>
+                    <input type="text" id="editUsername" name="username" value="{{ session['user'] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEmail">Email:</label>
+                    <input type="email" id="editEmail" name="email" value="{{ session.get('email', '') }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="editHeight">Height (cm):</label>
+                    <input type="number" id="editHeight" name="height" value="{{ session.get('height', '') }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="editWeight">Weight (kg):</label>
+                    <input type="number" id="editWeight" name="weight" value="{{ session.get('weight', '') }}" required>
+                </div>
+                <button type="submit" class="btn">Save Changes</button>
+                <button type="button" id="cancelEditBtn" class="btn">Cancel</button>
+            </form>
+        </div>
 
+        <div class="upload-photo-form" id="uploadPhotoForm" style="display:none;">
+            <h2>Upload Profile Photo</h2>
+            <form id="photoForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="profilePhoto">Choose Photo:</label>
+                    <input type="file" id="profilePhoto" name="profile_photo" accept="image/*" required>
+                </div>
+                <button type="submit" class="btn">Upload Photo</button>
+                <button type="button" id="cancelPhotoBtn" class="btn">Cancel</button>
+            </form>
+        </div>
     </div>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-    <script>
-        function deletePost(postId) {
-            if (confirm('Are you sure you want to delete this post?')) {
-                fetch('/delete_post/' + postId, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Post deleted successfully');
-                        location.reload();
-                    } else {
-                        alert('Failed to delete post: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while deleting the post');
-                });
-            }
-        }
-    </script>
 </body>
 </html>
