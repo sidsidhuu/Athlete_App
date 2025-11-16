@@ -87,6 +87,9 @@ classes = ['running', 'walking', 'squats', 'pushups', 'jumping_jacks', 'stretchi
 start_time = time.time()
 activity_duration = 0
 
+# Global variable for main.py process
+main_process = None
+
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -232,12 +235,32 @@ def performance():
 
 @app.route('/start_main_py', methods=['POST'])
 def start_main_py():
+    global main_process
     if 'user' not in session:
         return jsonify({'error': 'Not logged in'}), 401
     try:
-        # Run main.py in a separate thread to avoid blocking
-        threading.Thread(target=lambda: subprocess.run(['python', 'main.py'])).start()
-        return jsonify({'message': 'Main.py started'})
+        if main_process is None or main_process.poll() is not None:
+            # Start main.py as a subprocess
+            main_process = subprocess.Popen(['python', 'main.py'])
+            return jsonify({'message': 'Main.py started'})
+        else:
+            return jsonify({'message': 'Main.py is already running'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/stop_main_py', methods=['POST'])
+def stop_main_py():
+    global main_process
+    if 'user' not in session:
+        return jsonify({'error': 'Not logged in'}), 401
+    try:
+        if main_process and main_process.poll() is None:
+            main_process.terminate()
+            main_process.wait()
+            main_process = None
+            return jsonify({'message': 'Main.py stopped'})
+        else:
+            return jsonify({'message': 'Main.py is not running'})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

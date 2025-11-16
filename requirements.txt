@@ -5,7 +5,7 @@ Flask-Session
 Werkzeug
 tensorflow
 keras
-opencv-python-headless
+opencv-python
 numpy
 matplotlib
 scikit-learn==1.6.1

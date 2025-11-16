@@ -23,16 +23,19 @@
     <div class="container">
         <h1>Real-time Activity Recognition</h1>
         <div class="recognition-container">
-            <video id="video" autoplay style="display:block; width: 640px; height: 480px; border: 2px solid #ccc;"></video>
-            <canvas id="canvas" style="display:none;"></canvas>
+            <p>The camera will open in a separate OpenCV window when recognition starts.</p>
+            <div class="camera-container">
+                <video id="video" autoplay playsinline style="display:none; width: 100%; max-width: 640px; border: 2px solid #333;"></video>
+                <canvas id="canvas" style="display:none;"></canvas>
+            </div>
             <div class="results">
-                <h2>Activity: <span id="activity">Waiting...</span></h2>
-                <h2>Performance Score: <span id="score">0.00</span></h2>
+                <h2>Status: <span id="status">Not Started</span></h2>
+                <p>Activity: <span id="activity">Waiting...</span></p>
+                <p>Score: <span id="score">0.00</span></p>
             </div>
         </div>
         <button id="startBtn" class="btn">Start Recognition</button>
         <button id="stopBtn" class="btn" style="display:none;">Stop Recognition</button>
-        <button id="offBtn" class="btn" style="display:none;">Off Camera</button>
     </div>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>

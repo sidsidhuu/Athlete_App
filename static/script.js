@@ -9,22 +9,15 @@ if ('serviceWorker' in navigator) {
         });
 }
 
-const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
-const activitySpan = document.getElementById('activity');
-const scoreSpan = document.getElementById('score');
+const statusSpan = document.getElementById('status');
 const startBtn = document.getElementById('startBtn');
 const stopBtn = document.getElementById('stopBtn');
-const offBtn = document.getElementById('offBtn');
 
-let stream;
-let intervalId;
 let selectedActivities = [];
 let activityScores = {};
 
 if (startBtn) startBtn.addEventListener('click', startRecognition);
 if (stopBtn) stopBtn.addEventListener('click', stopRecognition);
-if (offBtn) offBtn.addEventListener('click', offCamera);
 
 // Athlete Fitness specific code
 const selectActivitiesBtn = document.getElementById('selectActivities');
@@ -304,88 +297,92 @@ function addGamingChallenge(e) {
 
 async function startRecognition() {
     try {
-        stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-                width: { ideal: 640 },
-                height: { ideal: 480 },
-                facingMode: 'user'
-            }
-        });
-        video.srcObject = stream;
-        video.style.display = 'block';  // Show video when started
-        startBtn.style.display = 'none';
-        stopBtn.style.display = 'inline-block';
-        offBtn.style.display = 'inline-block';
+        // Start web-based camera recognition
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    width: { ideal: 640 },
+                    height: { ideal: 480 },
+                    facingMode: 'user'
+                }
+            });
 
-        // Start sending frames every second
-        intervalId = setInterval(captureAndPredict, 1000);
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const activitySpan = document.getElementById('activity');
+            const scoreSpan = document.getElementById('score');
+
+            video.srcObject = stream;
+            video.style.display = 'block';
+
+            statusSpan.textContent = 'Running';
+            startBtn.style.display = 'none';
+            stopBtn.style.display = 'inline-block';
+
+            // Start capturing frames
+            const intervalId = setInterval(() => {
+                if (video.videoWidth > 0) {
+                    const context = canvas.getContext('2d');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    const imageData = canvas.toDataURL('image/jpeg');
+
+                    fetch('/predict', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ image: imageData, selected_activities: ['running', 'walking', 'squats', 'pushups', 'jumping_jacks', 'stretching'] }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        activitySpan.textContent = data.activity;
+                        scoreSpan.textContent = data.score;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                }
+            }, 1000);
+
+            // Store interval ID for stopping later
+            video.dataset.intervalId = intervalId;
+            video.dataset.stream = stream;
+        } else {
+            alert('Camera not supported in this browser.');
+        }
     } catch (err) {
-        console.error('Error accessing camera:', err);
+        console.error('Error starting recognition:', err);
         alert('Error accessing camera. Please allow camera access and make sure no other application is using the camera.');
     }
 }
 
 function stopRecognition() {
-    if (intervalId) {
-        clearInterval(intervalId);
-        intervalId = null;
-    }
-    startBtn.style.display = 'inline-block';
-    stopBtn.style.display = 'none';
-    offBtn.style.display = 'inline-block';
-    activitySpan.textContent = 'Waiting...';
-    scoreSpan.textContent = '0.00';
-}
+    const video = document.getElementById('video');
+    const activitySpan = document.getElementById('activity');
+    const scoreSpan = document.getElementById('score');
 
-function offCamera() {
-    if (stream) {
+    // Stop the camera stream
+    if (video && video.dataset.stream) {
+        const stream = video.dataset.stream;
         stream.getTracks().forEach(track => track.stop());
-        stream = null;
+        video.srcObject = null;
+        video.style.display = 'none';
     }
-    if (intervalId) {
-        clearInterval(intervalId);
-        intervalId = null;
+
+    // Stop the interval
+    if (video && video.dataset.intervalId) {
+        clearInterval(video.dataset.intervalId);
     }
-    video.srcObject = null;
-    video.style.display = 'none';  // Hide video when off
-    startBtn.style.display = 'inline-block';
-    stopBtn.style.display = 'none';
-    offBtn.style.display = 'none';
+
+    // Reset UI
+    statusSpan.textContent = 'Stopped';
     activitySpan.textContent = 'Waiting...';
     scoreSpan.textContent = '0.00';
-}
-
-function captureAndPredict() {
-    const context = canvas.getContext('2d');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    const imageData = canvas.toDataURL('image/jpeg');
-
-    fetch('/predict', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ image: imageData, selected_activities: selectedActivities }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        activitySpan.textContent = `activity - ${data.activity}`;
-        scoreSpan.textContent = data.score;
-        // Update activity scores for average
-        if (data.activity in activityScores) {
-            activityScores[data.activity] = parseFloat(data.score);
-            updateAverageScore();
-            // Update individual activity score display
-            const activityItem = document.querySelector(`[data-activity="${data.activity}"]`).parentElement;
-            activityItem.querySelector('.activity-score').textContent = `Score: ${data.score}`;
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+    startBtn.style.display = 'inline-block';
+    stopBtn.style.display = 'none';
 }
 
 // Activity selection logic
@@ -720,10 +717,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Stop recognition when page unloads
 window.addEventListener('beforeunload', () => {
-    if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-    }
-    if (intervalId) {
-        clearInterval(intervalId);
-    }
+    // Optionally stop the main.py process when leaving the page
+    fetch('/stop_main_py', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).catch(error => {
+        console.error('Error stopping recognition on unload:', error);
+    });
 });
